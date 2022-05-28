@@ -56,12 +56,39 @@ async function run() {
         const phones = await cursor.toArray();
         res.send(phones);
     })
+    // products api
+    app.get('/products', async (req, res) => {
+        const query = {};
+        const cursor = bikeCollection.find(query);
+        const phones = await cursor.toArray();
+        res.send(phones);
+    })
 
+    app.get('/product/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await bikeCollection.findOne(query);
+        res.send(result);
+    })
+    app.delete('/product/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await bikeCollection.deleteOne(query);
+        res.send(result);
+    })
+    app.post('/products', async (req, res) => {
+        const newItem = req.body;
+        const result = await bikeCollection.insertOne(newItem);
+        res.send(result);
 
+    })
+    app.get('/products/email', async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const phones = await bikeCollection.find(query).toArray();
+        res.send(phones);
 
-
-
-
+    })
 
     const result = await bikeCollection.updateOne(filter, updateDoc, options);
     res.send(result);
