@@ -89,10 +89,25 @@ async function run() {
         res.send(phones);
 
     })
-
-    const result = await bikeCollection.updateOne(filter, updateDoc, options);
-    res.send(result);
-})
+    app.put('/product/:id', async (req, res) => {
+        const id = req.params.id;
+        const user = req.body;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+                quantity: user.quantity,
+                sold: user.sold,
+                name: user.name,
+                email: user.email,
+                description: user.description,
+                supplierName: user.supplierName,
+                price: user.price
+            },
+        };
+        const result = await bikeCollection.updateOne(filter, updateDoc, options);
+        res.send(result);
+    })
 
 }
 
