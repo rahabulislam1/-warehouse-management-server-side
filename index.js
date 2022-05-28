@@ -41,7 +41,21 @@ async function run() {
     const bikeCollection = client.db("products").collection("bike");
     const myCollection = client.db("products").collection("myBikes");
 
+    // Auth
+    app.post('/login', async (req, res) => {
+        const user = req.body;
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: '1d'
+        });
+        res.send({ accessToken });
+    })
 
+    app.get('/myProducts', async (req, res) => {
+        const query = {};
+        const cursor = myCollection.find(query);
+        const phones = await cursor.toArray();
+        res.send(phones);
+    })
 
 
 
